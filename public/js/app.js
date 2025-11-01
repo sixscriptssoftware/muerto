@@ -101,6 +101,12 @@ async function createNewSession() {
         const data = await response.json();
         
         if (data.success) {
+            // Validate session ID contains only alphanumeric characters
+            if (!/^[a-z0-9]+$/.test(data.sessionId)) {
+                logConsole('Invalid session ID received', 'error');
+                return;
+            }
+            
             currentSessionId = data.sessionId;
             localStorage.setItem('sessionId', currentSessionId);
             document.getElementById('session-id').textContent = currentSessionId;

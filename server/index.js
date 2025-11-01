@@ -18,7 +18,18 @@ const limiter = rateLimit({
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+
+// Serve static files with correct MIME types
+app.use(express.static('public', {
+  setHeaders: (res, filepath) => {
+    if (filepath.endsWith('.js')) {
+      res.set('Content-Type', 'application/javascript');
+    } else if (filepath.endsWith('.css')) {
+      res.set('Content-Type', 'text/css');
+    }
+  }
+}));
+
 app.use('/api/', limiter);
 
 // Configure multer for file uploads
@@ -94,7 +105,9 @@ app.get('/api/files/:sessionId', async (req, res) => {
 app.get('/api/file/:sessionId/:filename', async (req, res) => {
   try {
     const { sessionId, filename } = req.params;
-    const filePath = path.join(__dirname, '..', 'uploads', sessionId, filename);
+    // Sanitize filename to prevent path traversal
+    const sanitizedFilename = path.basename(filename);
+    const filePath = path.join(__dirname, '..', 'uploads', sessionId, sanitizedFilename);
     const content = await fs.readFile(filePath, 'utf-8');
     res.json({ success: true, content });
   } catch (error) {
@@ -107,7 +120,9 @@ app.put('/api/file/:sessionId/:filename', async (req, res) => {
   try {
     const { sessionId, filename } = req.params;
     const { content } = req.body;
-    const filePath = path.join(__dirname, '..', 'uploads', sessionId, filename);
+    // Sanitize filename to prevent path traversal
+    const sanitizedFilename = path.basename(filename);
+    const filePath = path.join(__dirname, '..', 'uploads', sessionId, sanitizedFilename);
     await fs.writeFile(filePath, content, 'utf-8');
     res.json({ success: true });
   } catch (error) {
@@ -119,7 +134,9 @@ app.put('/api/file/:sessionId/:filename', async (req, res) => {
 app.delete('/api/file/:sessionId/:filename', async (req, res) => {
   try {
     const { sessionId, filename } = req.params;
-    const filePath = path.join(__dirname, '..', 'uploads', sessionId, filename);
+    // Sanitize filename to prevent path traversal
+    const sanitizedFilename = path.basename(filename);
+    const filePath = path.join(__dirname, '..', 'uploads', sessionId, sanitizedFilename);
     await fs.unlink(filePath);
     res.json({ success: true });
   } catch (error) {
@@ -135,6 +152,10 @@ app.post('/api/execute', async (req, res) => {
     if (!code) {
       return res.status(400).json({ success: false, error: 'No code provided' });
     }
+
+    // Initialize output and error arrays before VM creation
+    const output = [];
+    const errors = [];
 
     // Create a sandboxed VM
     const vm = new VM({
@@ -159,9 +180,6 @@ app.post('/api/execute', async (req, res) => {
         }
       }
     });
-
-    const output = [];
-    const errors = [];
 
     try {
       const result = vm.run(code);
@@ -201,6 +219,15 @@ app.post('/api/session', async (req, res) => {
 async function cleanupOldSessions() {
   try {
     const uploadsDir = path.join(__dirname, '..', 'uploads');
+    
+    // Check if uploads directory exists
+    try {
+      await fs.access(uploadsDir);
+    } catch {
+      // Directory doesn't exist yet, nothing to clean up
+      return;
+    }
+    
     const sessions = await fs.readdir(uploadsDir);
     const now = Date.now();
     

@@ -104,11 +104,19 @@ console.log("Agent memory:", agent.recall());
 
 ## Security Features
 
-- **Rate Limiting**: Prevents abuse with request rate limits
 - **Sandboxed Execution**: Code runs in an isolated VM with no access to the file system or network
+- **Rate Limiting**: Prevents abuse with request rate limits (100 requests per 15 minutes)
 - **File Size Limits**: Maximum 5MB per file
 - **Session Cleanup**: Old sessions are automatically cleaned up after 24 hours
 - **CORS Protection**: Configurable CORS settings
+- **Path Traversal Protection**: Filenames are sanitized to prevent directory traversal attacks
+- **Session ID Validation**: Session IDs are validated to contain only alphanumeric characters
+
+**Note on VM2**: This project uses VM2 for sandboxed code execution. While VM2 is deprecated and has known limitations, it remains one of the most practical solutions for browser-based JavaScript sandboxing. For production use, consider additional security measures such as:
+- Running the sandbox in a separate Docker container
+- Using isolated-vm for better isolation (requires native compilation)
+- Implementing additional input validation and sanitization
+- Running the service behind a WAF (Web Application Firewall)
 
 ## Architecture
 
