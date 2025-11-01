@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Muerto is a software project maintained by Six Scripts Software. This repository is in its early stages of development.
+Muerto is a software project by Six Scripts Software. This repository is in its early stages of development.
 
 ## General Guidelines
 
