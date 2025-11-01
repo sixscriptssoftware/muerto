@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muerto - Sandbox IDE</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="vs/editor/editor.main.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🧪 Muerto - Sandbox IDE</h1>
+            <p class="subtitle">Upload files, edit code, and test your AI agents in a safe sandbox environment</p>
+            <div class="session-info">
+                Session: <span id="session-id">Loading...</span>
+                <button id="new-session-btn" class="btn btn-secondary">New Session</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sidebar - File Manager -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h3>📁 Files</h3>
+                    <button id="upload-btn" class="btn btn-primary">Upload</button>
+                    <input type="file" id="file-input" multiple style="display: none;">
+                </div>
+                <div id="file-list" class="file-list">
+                    <p class="empty-state">No files uploaded yet</p>
+                </div>
+            </aside>
+
+            <!-- Editor Section -->
+            <main class="editor-section">
+                <div class="editor-header">
+                    <div class="editor-tabs" id="editor-tabs">
+                        <div class="tab welcome-tab active" data-file="welcome">
+                            <span>Welcome</span>
+                        </div>
+                    </div>
+                    <div class="editor-actions">
+                        <button id="save-btn" class="btn btn-success" disabled>Save</button>
+                        <button id="run-btn" class="btn btn-primary">Run Code</button>
+                    </div>
+                </div>
+                <div id="editor-container" class="editor-container"></div>
+            </main>
+
+            <!-- Console/Output Panel -->
+            <aside class="console-panel">
+                <div class="console-header">
+                    <h3>📋 Console Output</h3>
+                    <button id="clear-console-btn" class="btn btn-secondary btn-sm">Clear</button>
+                </div>
+                <div id="console-output" class="console-output">
+                    <div class="console-welcome">
+                        Welcome to Muerto Sandbox IDE! 🎉<br>
+                        - Upload your files using the Upload button<br>
+                        - Edit code in the editor<br>
+                        - Run JavaScript code to test your AI agents<br>
+                        - All code runs in a secure sandbox environment
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Monaco Editor -->
+    <script src="vs/loader.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
