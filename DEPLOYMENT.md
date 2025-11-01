@@ -26,7 +26,7 @@ After deployment completes (usually takes 1-2 minutes), your site will be availa
 
 ## Workflow Details
 
-The deployment workflow (`.github/workflows/deploy.yml`) will:
+The deployment workflow (`.github/workflows/static.yml`) will:
 - Trigger automatically when changes are pushed to the `main` branch
 - Can also be triggered manually from the Actions tab
 - Deploy the entire repository content as a static site
@@ -36,7 +36,7 @@ The deployment workflow (`.github/workflows/deploy.yml`) will:
 
 - `index.html` - Main landing page
 - `styles.css` - Stylesheet for the landing page
-- `.github/workflows/deploy.yml` - GitHub Actions workflow for deployment
+- `.github/workflows/static.yml` - GitHub Actions workflow for deployment
 - `README.md` - Project documentation
 - `LICENSE` - MIT License
 
