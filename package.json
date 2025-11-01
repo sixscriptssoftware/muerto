@@ -1,0 +1,29 @@
+{
+  "name": "muerto",
+  "version": "1.0.0",
+  "description": "A web-based sandbox IDE for testing AI agents in a secure environment",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js",
+    "postinstall": "cp -r node_modules/monaco-editor/min/vs public/ || true",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "sandbox",
+    "ide",
+    "ai-agents",
+    "code-editor",
+    "web-ide"
+  ],
+  "author": "Ashton Aschenbrener",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.2.1",
+    "monaco-editor": "^0.53.0",
+    "multer": "^2.0.2",
+    "vm2": "^3.10.0"
+  }
+}

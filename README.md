@@ -1,22 +1,196 @@
-# Muerto 🪦
+# Muerto - Sandbox IDE
 
-A Six Scripts Software project.
+🧪 A web-based sandbox IDE for uploading files, editing code, and testing AI agents in a secure, isolated environment.
 
-## GitHub Pages
+## Features
 
-This site is deployed to GitHub Pages and can be viewed at:
-https://sixscriptssoftware.github.io/muerto/
+- **File Upload**: Upload multiple files to your sandbox session
+- **Code Editor**: Monaco editor (VS Code's editor) with syntax highlighting for multiple languages
+- **Secure Sandbox**: Execute JavaScript code in an isolated VM environment
+- **AI Agent Testing**: Perfect for testing AI agents and their behavior in a controlled environment
+- **Session Management**: Each session is isolated with its own file system
+- **Console Output**: Real-time console output with error handling
+- **Multi-Tab Support**: Open and edit multiple files simultaneously
 
-**Note:** After merging this PR to `main`, you'll need to enable GitHub Pages in the repository settings. See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
+## Quick Start
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/sixscriptssoftware/muerto.git
+cd muerto
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start the server:
+```bash
+npm start
+```
+
+4. Open your browser and navigate to:
+```
+http://localhost:3000
+```
+
+## Usage
+
+### Uploading Files
+
+1. Click the **Upload** button in the sidebar
+2. Select one or more files from your computer
+3. Files will appear in the file list
+
+### Editing Code
+
+1. Click on any file in the sidebar to open it in the editor
+2. Edit the code using the Monaco editor
+3. Click **Save** to save your changes
+
+### Running Code
+
+1. Open or write JavaScript code in the editor
+2. Click the **Run Code** button
+3. View the output in the Console panel
+
+### Testing AI Agents
+
+The sandbox is designed specifically for testing AI agents. Here's an example:
+
+```javascript
+class SimpleAgent {
+    constructor(name) {
+        this.name = name;
+        this.memory = [];
+    }
+    
+    think(input) {
+        this.memory.push({ input, timestamp: Date.now() });
+        console.log(`[${this.name}] Thinking about: ${input}`);
+        return `Processed: ${input}`;
+    }
+    
+    recall() {
+        console.log(`[${this.name}] Memory contains ${this.memory.length} items`);
+        return this.memory;
+    }
+}
+
+// Test the agent
+const agent = new SimpleAgent("TestBot");
+agent.think("Hello, world!");
+agent.think("What is 2 + 2?");
+console.log("Agent memory:", agent.recall());
+```
+
+## API Endpoints
+
+### Session Management
+- `POST /api/session` - Create a new session
+- `GET /api/files/:sessionId` - List files in a session
+
+### File Operations
+- `POST /api/upload` - Upload files
+- `GET /api/file/:sessionId/:filename` - Get file content
+- `PUT /api/file/:sessionId/:filename` - Update file content
+- `DELETE /api/file/:sessionId/:filename` - Delete file
+
+### Code Execution
+- `POST /api/execute` - Execute JavaScript code in sandbox
+
+## Security Features
+
+- **Sandboxed Execution**: Code runs in an isolated VM with no access to the file system or network
+- **Rate Limiting**: Prevents abuse with request rate limits (100 requests per 15 minutes)
+- **File Size Limits**: Maximum 5MB per file
+- **Session Cleanup**: Old sessions are automatically cleaned up after 24 hours
+- **CORS Protection**: Configurable CORS settings
+- **Path Traversal Protection**: Filenames are sanitized to prevent directory traversal attacks
+- **Session ID Validation**: Session IDs are validated to contain only alphanumeric characters
+
+**Note on VM2**: This project uses VM2 for sandboxed code execution. While VM2 is deprecated and has known limitations, it remains one of the most practical solutions for browser-based JavaScript sandboxing. For production use, consider additional security measures such as:
+- Running the sandbox in a separate Docker container
+- Using isolated-vm for better isolation (requires native compilation)
+- Implementing additional input validation and sanitization
+- Running the service behind a WAF (Web Application Firewall)
+
+## Architecture
+
+```
+muerto/
+├── server/
+│   └── index.js          # Express server with API endpoints
+├── public/
+│   ├── index.html        # Main HTML file
+│   ├── css/
+│   │   └── style.css     # Styles
+│   └── js/
+│       └── app.js        # Frontend application logic
+├── uploads/              # User uploaded files (organized by session)
+└── package.json          # Dependencies and scripts
+```
+
+## Technology Stack
+
+- **Backend**: Node.js, Express
+- **Frontend**: HTML, CSS, JavaScript
+- **Editor**: Monaco Editor (VS Code's editor)
+- **Sandbox**: VM2 for secure code execution
+- **File Upload**: Multer
+- **Security**: express-rate-limit, CORS
+
+## Configuration
+
+### Port
+The default port is 3000. You can change it by setting the `PORT` environment variable:
+```bash
+PORT=8080 npm start
+```
+
+### Session Cleanup
+Sessions older than 24 hours are automatically deleted. You can modify this in `server/index.js`.
+
+### File Size Limits
+The default file size limit is 5MB. Modify the `limits` option in the multer configuration to change this.
 
 ## Development
 
-The site is a simple static HTML/CSS website that automatically deploys to GitHub Pages when changes are pushed to the `main` branch.
+### Running in Development Mode
+```bash
+npm run dev
+```
+
+### Adding New Features
+
+The codebase is organized for easy extension:
+- Add new API endpoints in `server/index.js`
+- Modify the UI in `public/index.html` and `public/css/style.css`
+- Extend functionality in `public/js/app.js`
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License - see LICENSE file for details
 
-## Author
+## Contributing
 
-Copyright (c) 2025 Ashton Aschenbrener
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Support
+
+For issues, questions, or suggestions, please open an issue on GitHub.
+
+## Roadmap
+
+Future enhancements:
+- [ ] Support for more programming languages (Python, Go, etc.)
+- [ ] Real-time collaboration features
+- [ ] Plugin system for custom tools
+- [ ] Export/import session data
+- [ ] Docker container support
+- [ ] WebSocket-based real-time console
+- [ ] Debugger integration
+- [ ] Git integration
